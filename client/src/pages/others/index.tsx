@@ -4,8 +4,8 @@ import './index.css';
 interface OtherProps {
   pageId?: string | undefined;
 }
-const Other: React.FC<OtherProps> = ({ pageId }) => {
-  return <div id={pageId}>Other</div>;
+const Others: React.FC<OtherProps> = ({ pageId }) => {
+  return <div className='other' id={pageId}>Other</div>;
 };
 
-export default Other;
+export default Others;
