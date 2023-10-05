@@ -8,6 +8,7 @@ interface FibonacciProps {
 
 const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
   const [seenIndexes, setSeenIndexes] = useState([]);
+  const [error, setError] = useState<string>('')
   const [values, setValues] = useState<any>({});
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -21,7 +22,7 @@ const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
   
       setInputValue('');
     } catch (error) {
-      console.log(error)
+      setError('404 (Not Found)')
     }
    
   };
@@ -51,7 +52,7 @@ const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
           setValues(values.data);
         }
       } catch (error) {
-        console.log(error);
+        setError('404 (Not Found)')
       }
     };
     const fetchValues = async () => {
@@ -61,7 +62,7 @@ const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
           setSeenIndexes(seenIndexes.data);
         }
       } catch (error) {
-        console.log(error);
+        setError('404 (Not Found)')
       }
     };
 
@@ -71,6 +72,7 @@ const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
 
   return (
     <div className="fibonacci" id={pageId}>
+      <h2>{error && error}</h2>
       <form onSubmit={handleSubmit}>
         <label>Enter your index:</label>
         <input
