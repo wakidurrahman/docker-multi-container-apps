@@ -1,16 +1,18 @@
 
 # This image only use for production environment setup
 # Build Phase
-FROM node:18
+FROM node:18-alpine as builder
 
-WORKDIR /usr/src/app
+WORKDIR '/app'
 
-COPY project.json .
+COPY ./package.json ./
 RUN npm install
-COPY . .
+COPY ./ ./
+RUN npm run build
 
+
+# Run Phase
+FROM nginx
 EXPOSE 3000
-
-CMD ["npm", "run", "build"]
-
-
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html
