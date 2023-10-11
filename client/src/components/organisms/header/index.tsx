@@ -60,12 +60,12 @@ const Header: React.FC = () => {
             Fibonacci
             </li>
           </Link>
-          <Link to="/other">
+          <Link to="/otherpage">
             <li className="hidden sm:inline text-slate-700 hover:underline">
             Other
             </li>
           </Link>
-          <Link to="/profile">
+          <Link to="#">
             {currentUser ? (
               <img
                 className="rounded-full h-7 w-7 object-cover"

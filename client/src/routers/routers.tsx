@@ -9,7 +9,7 @@ const Routers = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/fibonacci" element={<Fibonacci />} />
-      <Route path="/other" element={<Others />} />
+      <Route path="/otherpage" element={<Others />} />
     </Routes>
   );
 };
