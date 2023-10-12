@@ -38,7 +38,7 @@ jobs:
           tags: ${{ env.TEST_TAG }}
       - name: Test run
         run: |
-          docker run --rm ${{ env.TEST_TAG }}
+          docker run -e CI=true ${{ env.TEST_TAG }} npm run test 
 
       # Builds the container image and pushes it to the Docker Hub repository, using Build and push Docker images
       - name: Build and push Docker Client image
