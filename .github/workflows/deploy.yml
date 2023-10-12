@@ -32,9 +32,8 @@ jobs:
       - name: Build and export to Docker
         uses: docker/build-push-action@v5
         with:
-          context: client
+          context: client/
           file: client/Dockerfile.dev
-          target: test
           load: true
           tags: ${{ env.TEST_TAG }}
       - name: Test run
