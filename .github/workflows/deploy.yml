@@ -1,4 +1,5 @@
 name: Deployment Docker Image CI
+run-name: Push Docker image to Docker Hub.
 
 on:
   push:
