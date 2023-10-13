@@ -1,0 +1,68 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+      {
+        "name": "client",
+        "image": "wakidur/multi-client",
+        "host": "client",
+        "essential": false
+      },
+      {
+        "name": "server",
+        "image": "wakidur/multi-server",
+        "host": "api",
+        "essential": false
+      },
+      {
+        "name": "worker",
+        "image": "wakidur/multi-worker",
+        "host": "worker",
+        "essential": false
+      },
+      {
+        "name": "nginx",
+        "image": "wakidur/multi-nginx",
+        "essential": true,
+        "memory": 128,
+        "portMappings": [
+          {
+            "hostPort": 80,
+            "containerPort": 80
+          }
+        ],
+        "links": [
+          "client", "server"
+        ],
+        "mountPoints": [
+          {
+            "sourceVolume": "php-app",
+            "containerPath": "/var/www/html",
+            "readOnly": true
+          },
+          {
+            "sourceVolume": "nginx-proxy-conf",
+            "containerPath": "/etc/nginx/conf.d",
+            "readOnly": true
+          },
+          {
+            "sourceVolume": "awseb-logs-nginx-proxy",
+            "containerPath": "/var/log/nginx"
+          }
+        ]
+      }
+    ],
+    "volumes": [
+      {
+        "name": "php-app",
+        "host": {
+          "sourcePath": "/var/app/current/php-app"
+        }
+      },
+      {
+        "name": "nginx-proxy-conf",
+        "host": {
+          "sourcePath": "/var/app/current/proxy/conf.d"
+        }
+      }
+    ]
+  }
