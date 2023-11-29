@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 const Header: React.FC = () => {
   const location = useLocation();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentUser, setCurrentUser] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const navigate = useNavigate();
@@ -30,8 +31,8 @@ const Header: React.FC = () => {
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
-            <span className="text-slate-500">Lorem</span>
-            <span className="text-slate-700">Ipsum</span>
+            <span className="text-slate-500">Lorem </span>
+            <span className="text-slate-700"> Ipsum</span>
           </h1>
         </Link>
         <form

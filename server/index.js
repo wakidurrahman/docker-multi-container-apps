@@ -17,6 +17,10 @@ const pgClient = new Pool({
   database: keys.pgDatabase,
   password: keys.pgPassword,
   port: keys.pgPort,
+  ssl:
+    process.env.NODE_ENV !== 'production'
+      ? false
+      : { rejectUnauthorized: false },
 });
 
 pgClient.on("connect", (client) => {
@@ -59,7 +63,12 @@ app.post("/values", async (req, res) => {
     return res.status(422).send("Index too high");
   }
 
+  // So eventually the worker is gonna come to the hash or kind of data structure that 
+  // we're creating inside of Redis and it's going to replace this nothing yet string 
+  // with the actual calculated value.
   redisClient.hset("values", index, "Nothing yet!");
+ // So this right here is gonna be the message that gets sent over to that worker process. 
+ // It's gonna wake up the worker process and say, hey, it's time to pull a new value out of Redis and start calculating the Fibonacci value for it.
   redisPublisher.publish("insert", index);
   pgClient.query("INSERT INTO values(number) VALUES($1)", [index]);
 

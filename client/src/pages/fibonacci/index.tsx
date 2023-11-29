@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { MainContainer } from '../../components/template/main-container';
-import './index.css';
+import './index.scss';
 
 interface FibonacciProps {
   pageId?: string | undefined;
@@ -45,6 +45,7 @@ const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
   };
 
   useEffect(() => {
+    // Fetch Index from redis 
     const fetchIndexes = async () => {
       try {
         const values = await axios.get('/api/values/current');
@@ -55,6 +56,8 @@ const Fibonacci: React.FC<FibonacciProps> = ({ pageId }) => {
         setError('404 (Not Found)');
       }
     };
+    
+   // Fetch Values from postgres
     const fetchValues = async () => {
       try {
         const seenIndexes = await axios.get('/api/values/all');
