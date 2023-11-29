@@ -1,9 +1,21 @@
-FROM node:18-alpine 
+# syntax=docker/dockerfile:1.4
 
-WORKDIR '/app'
+ARG NODE_VERSION=18.10.0
 
-COPY ./package.json ./
+# Create image based on the official Node image from dockerhub
+FROM node:${NODE_VERSION}-alpine 
+
+# Create app directory
+WORKDIR /app
+
+# Copy dependency definitions
+COPY ./package.json /app
+COPY ./package-lock.json /app
+
+# Install dependecies
 RUN npm install
-COPY ./ ./
+
+# Get all the code needed to run the app
+COPY ./ /app
 
 CMD ["npm", "run", "dev"]
