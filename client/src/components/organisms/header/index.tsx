@@ -66,7 +66,7 @@ const Header: React.FC = () => {
             Other
             </li>
           </Link>
-          <Link to="#">
+          <Link to="/signin">
             {currentUser ? (
               <img
                 className="rounded-full h-7 w-7 object-cover"

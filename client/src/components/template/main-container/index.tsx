@@ -10,7 +10,7 @@ export const MainContainer: FC<MainContainerProps> = ({ children, pageId }) => {
   return (
     <div id={pageId} className="t-main-container">
       <Header />
-      <main className="t-main-container__body">{children}</main>
+      <main className="t-main-container__body container mx-auto">{children}</main>
     </div>
   );
 };
