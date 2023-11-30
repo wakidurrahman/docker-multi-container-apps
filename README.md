@@ -20,7 +20,7 @@ Multi container application project structure.
 │ ├── worker/
 │ ├── nginx/
 │ ├── .gitignore
-│ ├── docker-compose.yml
+│ ├── docker-compose-dev.yml
 │ ├── docker-compose.yml
 │ ├── Dockerrun.aws.json
 │ └── README.md

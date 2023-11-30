@@ -1,72 +1,79 @@
-# name: Deployment Docker Image CI
-# run-name: Push Docker image to Docker Hub.
+# https://docs.docker.com/build/ci/github-actions/#get-started-with-github-actions
+name: Builds and pushes to the Docker Hub repository CI
+run-name: Push Docker image to Docker Hub.
+on:
+  push:
+    branches: ['main']
 
-# on:
-#   push:
-#     branches: ['main']
+env:
+  TEST_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/multi-container-client-test:test
+  LATEST_TAG: latest
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks out the repository on the build machine.
+      - name: Check out the repo
+        uses: actions/checkout@v4
 
-# env:
-#   TEST_TAG: ${{ secrets.DOCKERHUB_USERNAME }}/react-test:test
-#   LATEST_TAG: user/app:latest
+      # Signs in to Docker Hub, using the Docker Login action and your Docker Hub credentials.
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-#     name: Push Docker image to Docker Hub
-#     steps:
-#       # Checks out the repository on the build machine.
-#       - name: Check out the repo
-#         uses: actions/checkout@v4
+      # Creates a BuildKit builder instance using the Docker Setup Buildx action.
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-#       # Creates a BuildKit builder instance using the Docker Setup Buildx action.
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v3
+      # Build Test version of client project
+      - name: Build client application for test
+        uses: docker/build-push-action@v5
+        with:
+          context: client/
+          file: client/Dockerfile.dev
+          load: true
+          tags: ${{ env.TEST_TAG }}
+      - name: Run test for client application
+        run: |
+          docker run -e CI=true ${{ env.TEST_TAG }} npm run test
 
-#         #Signs in to Docker Hub, using the Docker Login action and your Docker Hub credentials.
-#       - name: Login to Docker Hub
-#         uses: docker/login-action@v3
-#         with:
-#           username: ${{ secrets.DOCKERHUB_USERNAME }}
-#           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Builds production version of all projects and pushes it to the Docker Hub repository.
 
-#         # Test before push with GitHub Actions
-#       - name: Build and export to Docker
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: client/
-#           file: client/Dockerfile.dev
-#           load: true
-#           tags: ${{ env.TEST_TAG }}
-#       - name: Test run
-#         run: |
-#           docker run -e CI=true ${{ env.TEST_TAG }} npm run test 
+      - name: Build and push docker Client image.
+        uses: docker/build-push-action@v5
+        with:
+          # the build context.
+          context: client/
+          # filepath to the Dockerfile.
+          file:
+            client/Dockerfile
+            # tells the action to upload the image to a registry after building it
+          push: true
+          # tags that specify where to push the image.
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-container-client:${{env.LATEST_TAG}}
 
-#       # Builds the container image and pushes it to the Docker Hub repository, using Build and push Docker images
-#       - name: Build and push Docker Client image
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: client/
-#           file: client/Dockerfile
-#           push: true
-#           tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-client:latest
-#       - name: Build and push Docker Nginx image
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: nginx/
-#           file: nginx/Dockerfile
-#           push: true
-#           tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-nginx:latest
-#       - name: Build and push Docker Server image
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: server/
-#           file: server/Dockerfile
-#           push: true
-#           tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-server:latest
-#       - name: Build and push Docker Worker image
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: worker/
-#           file: worker/Dockerfile
-#           push: true
-#           tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-worker:latest
+      - name: Build and push docker Nginx image.
+        uses: docker/build-push-action@v5
+        with:
+          context: nginx/
+          file: nginx/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-container-nginx:${{env.LATEST_TAG}}
+
+      - name: Build and push docker Server image
+        uses: docker/build-push-action@v5
+        with:
+          context: server/
+          file: server/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-container-server:${{env.LATEST_TAG}}
+
+      - name: Build and push Docker Worker image
+        uses: docker/build-push-action@v5
+        with:
+          context: worker/
+          file: worker/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-container-worker:${{env.LATEST_TAG}}

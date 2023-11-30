@@ -18,4 +18,5 @@ RUN npm install
 # Get all the code needed to run the app
 COPY ./ /app
 
+# Serve the app
 CMD ["npm", "run", "dev"]
