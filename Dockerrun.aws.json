@@ -3,25 +3,25 @@
     "containerDefinitions": [
       {
         "name": "client",
-        "image": "wakidur/multi-client",
+        "image": "wakidur/multi-container-client",
         "host": "client",
         "essential": false
       },
       {
         "name": "server",
-        "image": "wakidur/multi-server",
+        "image": "wakidur/multi-container-server",
         "host": "api",
         "essential": false
       },
       {
         "name": "worker",
-        "image": "wakidur/multi-worker",
+        "image": "wakidur/multi-container-worker",
         "host": "worker",
         "essential": false
       },
       {
         "name": "nginx",
-        "image": "wakidur/multi-nginx",
+        "image": "wakidur/multi-container-nginx",
         "essential": true,
         "memory": 128,
         "portMappings": [

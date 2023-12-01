@@ -1,3 +1,4 @@
+# development environment specific only 
 version: '3.1'
 services:
   # https://hub.docker.com/_/postgres
@@ -14,7 +15,7 @@ services:
     image: 'redis:latest'
   ngins:
     depends_on:
-      - backend
+      - api
       - client
     restart: always
     build:
@@ -22,12 +23,12 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - '3050:80'
-  backend:
-    # Build backend service
+  api:
+    # Build api service
     build:
       context: ./server
       dockerfile: Dockerfile.dev
-    # Add a new volume to the backend service for the bind mount.
+    # Add a new volume to the api service for the bind mount.
     volumes:
       # Inside the container, don't try to override this folder. Don't try to override it, don't try to redirect access to it, just leave that folder as is.
       - /app/node_modules

@@ -1,11 +1,13 @@
-version: "3"
+# production environment specific only
+# The production compose file will follow closely what was written in the Dockerrun.aws.json
+version: "3.1"
 services:
   client:
-    image: "wakidur/multi-client"
+    image: "wakidur/multi-container-client"
     mem_limit: 128m
     hostname: client
   server:
-    image: "wakidur/multi-server"
+    image: "wakidur/multi-container-server"
     mem_limit: 128m
     hostname: api
     environment:
@@ -17,14 +19,14 @@ services:
       - PGPASSWORD=$PGPASSWORD
       - PGPORT=$PGPORT
   worker:
-    image: "wakidur/multi-worker"
+    image: "wakidur/multi-container-worker"
     mem_limit: 128m
     hostname: worker
     environment:
       - REDIS_HOST=$REDIS_HOST
       - REDIS_PORT=$REDIS_PORT
   nginx:
-    image: "wakidur/multi-nginx"
+    image: "wakidur/multi-container-nginx"
     mem_limit: 128m
     hostname: nginx
     ports:

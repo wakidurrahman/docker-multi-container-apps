@@ -77,3 +77,28 @@ jobs:
           file: worker/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/multi-container-worker:${{env.LATEST_TAG}}
+
+          
+      # https://github.com/einaregilsson/beanstalk-deploy
+      # Beanstalk Deploy is a GitHub action (and command line script) to deploy apps to AWS Elastic Beanstalk. 
+      # It takes the application name, environment name, version name, region and filename as parameters, uploads the file to S3, creates a new version in Elastic Beanstalk, and then deploys that version to the environment.
+      # Beanstalk Deploy, Using as a GitHub Action
+      # Generate deployment package
+      # - name: Generate deployment package
+      #   run: zip -r deploy.zip . -x '*.git*'
+
+      # # Beanstalk Deploy
+      
+      # - name: Deploy apps to AWS Elastic Beanstalk
+      #   uses: einaregilsson/beanstalk-deploy@v21
+      #   with:
+      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     application_name: multi-container
+      #     environment_name: Multi-container-env
+      #     existing_bucket_name: elasticbeanstalk-ap-northeast-1-734549988040
+      #     version_description: ${{github.SHA}}
+      #     version_label: ${{ github.sha }}
+      #     region: ap-northeast-1
+      #     deployment_package: deploy.zip
+
